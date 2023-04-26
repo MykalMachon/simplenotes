@@ -1,14 +1,22 @@
+import RealtimeNote from '@/components/RealtimeNote';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-type PostProps = {
+type NotePageProps = {
   note: any;
+  editMode: boolean;
 };
 
-const Post = ({ note }: PostProps) => {
+const DynamicEditorForm = dynamic(() => import('@/components/EditorForm'), {
+  loading: () => <p>loading...</p>,
+  ssr: false,
+});
+
+const NotePage = ({ note, editMode }: NotePageProps) => {
   const router = useRouter();
   const { nid } = router.query;
 
@@ -16,7 +24,15 @@ const Post = ({ note }: PostProps) => {
     console.log(`Client note id is ${nid}`);
   }, []);
 
-  return <main dangerouslySetInnerHTML={{ __html: note.content.html }} />;
+  if (editMode) {
+    return (
+      <>
+        <DynamicEditorForm noteId={note.id} />
+      </>
+    );
+  } else {
+    return <RealtimeNote noteId={note.id} />;
+  }
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -34,9 +50,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .from('notes')
     .select('*')
     .eq('id', params?.nid);
-
-  console.log(`signed in as ${user?.email}`);
-  console.log(data);
 
   // if there is an error, redirect to the homepage
   // TODO: show an error message
@@ -63,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // if there is a note, return it if they should have access
   if (data[0].is_public || user?.id === data[0].created_by) {
     return {
-      props: { note: data[0] },
+      props: { note: data[0], editMode: user?.id === data[0].created_by },
     };
   } else {
     return {
@@ -75,4 +88,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-export default Post;
+export default NotePage;
