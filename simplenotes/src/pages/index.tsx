@@ -5,6 +5,7 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Notes from '@/components/Notes';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 
 export default function Home() {
@@ -12,10 +13,22 @@ export default function Home() {
   const session = useSession();
   const supabase = useSupabaseClient();
 
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [buttonText, setButtonText] = useState('Create a new note');
+
+  const handleCreateNewNote = async (e: any) => {
+    e.preventDefault();
+    setButtonDisabled(true);
+    setButtonText('Creating a new note...');
+    await createNewNote();
+  };
+
   const createNewNote = async () => {
     const { data, error } = await supabase.from('notes').insert({ title: 'new note', created_by: session?.user.id }).select();
     if(error){
       alert('could not create a new note 🥲');
+      setButtonDisabled(false);
+      setButtonText('Create a new note');
       return;
     } else {
       router.push(`/notes/${data[0].id}`);
@@ -42,7 +55,7 @@ export default function Home() {
         ) : (
           <>
             <p>logged in as {session.user.email}</p>
-            <button onClick={createNewNote}>Create New Note</button>
+            <button onClick={handleCreateNewNote} disabled={buttonDisabled}>{buttonText}</button>
             <Notes />
           </>
         )}
