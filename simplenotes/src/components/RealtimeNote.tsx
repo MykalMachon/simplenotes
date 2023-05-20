@@ -53,7 +53,7 @@ const RealtimeNote = ({ noteId }: RealtimeNotes) => {
       ) : (
         <main>
           <h1>{note.title}</h1>
-          <main dangerouslySetInnerHTML={{ __html: note?.content?.html }}></main>
+          <article dangerouslySetInnerHTML={{ __html: note?.content?.html }}></article>
         </main>
       )}
     </>

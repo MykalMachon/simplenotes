@@ -4,16 +4,8 @@ import { Inter } from 'next/font/google';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import EditorForm from '@/components/EditorForm';
 import Notes from '@/components/Notes';
-import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const DynamicEditorForm = dynamic(() => import('@/components/EditorForm'), {
-  loading: () => <p>loading...</p>,
-  ssr: false,
-});
 
 export default function Home() {
   const session = useSession();
@@ -27,7 +19,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={`container`}>
+      <div>
         {!session ? (
           <Auth
             supabaseClient={supabase}
@@ -37,9 +29,8 @@ export default function Home() {
           />
         ) : (
           <>
-            <p>logged in.</p>
+            <p>logged in as {session.user.email}</p>
             <Notes />
-            <DynamicEditorForm noteId={1} />
           </>
         )}
       </div>

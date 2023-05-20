@@ -25,7 +25,9 @@ const Notes = () => {
             (<p>no notes found.</p>) : (
               <ul>
                 {notes.map((note: any) => (
-                  <li key={note.id}>{note.title}</li>
+                  <li key={note.id}>
+                    <a href={`/notes/${note.id}`}>{note.title}</a>
+                  </li>
                 ))}
               </ul>
             )}

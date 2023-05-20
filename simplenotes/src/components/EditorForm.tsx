@@ -30,7 +30,6 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
       .eq('id', noteId);
     if (error) console.log(error);
     if (data) {
-      console.log(data);
       setInitNote(data[0]);
     }
   };
@@ -43,22 +42,42 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
     // TODO: unlock and show the editor...
   };
 
-  const commitChanges = async (html: string | null) => {
+  const commitNoteChanges = async (html: string | null) => {
     // if(html) console.log(html);
     const { error } = await supabase
       .from('notes')
       .update({ content: { html: html } })
-      .eq('id', 1);
+      .eq('id', noteId);
     if (error) console.log(error);
   };
 
+  const commitMetaChanges = async (title: string, value: any) => {
+    // todo: do this but better.
+    if(value.trim() === '') {
+      alert('title cannot be empty');
+      return;
+    };
+
+    const { error } = await supabase
+      .from('notes')
+      .update({ [title]: value })
+      .eq('id', noteId);
+    if (error) console.log(error);
+  }
+
   // push the notes content changes up to the database after 1 second without changes.
   // TODO: create a way to listen for "is saved state" and show it in the UI.
-  const debouncedCommitChanges = useMemo(() => debounce(commitChanges), []);
+  const debouncedCommitNoteChanges = useMemo(() => debounce(commitNoteChanges), []);
+
+  const debouncedCommitMetaChanges = useMemo(() => debounce(commitMetaChanges), []);
+
+  const handleMetaChange = (event: any) => {
+    const { name, value, checked } = event.target;
+    debouncedCommitMetaChanges(name, name === 'is_public' ? checked : value);
+  }
 
   const handleChange = (html: string, text: string) => {
-    console.log('changing html...');
-    debouncedCommitChanges(html);
+    debouncedCommitNoteChanges(html);
   };
 
   return (
@@ -67,16 +86,37 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
         <p>loading...</p>
       ) : (
         <>
-          <h1>Editing: {initNote.title}</h1>
           {initNote === null ? (
             <p>loading...</p>
           ) : (
-            <TrixEditor
-              onChange={handleChange}
-              onEditorReady={handleEditorReady}
-              value={initNote?.content?.html}
-              mergeTags={[]}
-            />
+            <div>
+              <form onChange={handleMetaChange}>
+                <label htmlFor="title">
+                  Note Title:
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    defaultValue={initNote?.title}
+                  />
+                </label>
+                <label htmlFor="is_public">
+                  Public?
+                  <input
+                    type="checkbox"
+                    name="is_public"
+                    id="is_public"
+                    defaultChecked={initNote?.is_public}
+                  />
+                </label>
+              </form>
+              <TrixEditor
+                onChange={handleChange}
+                onEditorReady={handleEditorReady}
+                value={initNote?.content?.html}
+                mergeTags={[]}
+              />
+            </div>
           )}
         </>
       )}
