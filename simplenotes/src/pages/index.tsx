@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { Inter } from 'next/font/google';
 
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -38,6 +37,7 @@ export default function Home() {
             appearance={{ theme: ThemeSupa }}
             theme="light"
             providers={['discord', 'github']}
+            redirectTo={process.env.NEXT_PUBLIC_REDIRECT_URL}
           />
         ) : (
           <>
