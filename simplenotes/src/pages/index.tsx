@@ -5,11 +5,23 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Notes from '@/components/Notes';
+import { useRouter } from 'next/router';
 
 
 export default function Home() {
+  const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
+
+  const createNewNote = async () => {
+    const { data, error } = await supabase.from('notes').insert({ title: 'new note', created_by: session?.user.id }).select();
+    if(error){
+      alert('could not create a new note 🥲');
+      return;
+    } else {
+      router.push(`/notes/${data[0].id}`);
+    }
+  };
 
   return (
     <>
@@ -30,6 +42,7 @@ export default function Home() {
         ) : (
           <>
             <p>logged in as {session.user.email}</p>
+            <button onClick={createNewNote}>Create New Note</button>
             <Notes />
           </>
         )}

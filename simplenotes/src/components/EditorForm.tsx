@@ -53,7 +53,7 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
 
   const commitMetaChanges = async (title: string, value: any) => {
     // todo: do this but better.
-    if(value.trim() === '') {
+    if(typeof(value) == 'string' && value.trim() === '') {
       alert('title cannot be empty');
       return;
     };
