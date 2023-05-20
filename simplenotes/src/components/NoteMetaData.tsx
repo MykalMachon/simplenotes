@@ -26,7 +26,7 @@ const NoteMetaData = ({ noteData }: NoteMetaDataProps) => {
     const diffInMinutes = Math.floor(diff / (1000 * 60));
 
     if (diffInSeconds > -60) {
-      if(diffInSeconds > -1) {
+      if(diffInSeconds > -5) {
         setLastUpdated('just now')
         return;
       }

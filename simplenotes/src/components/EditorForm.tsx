@@ -103,7 +103,7 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
             <p>loading...</p>
           ) : (
             <div>
-              <form onChange={handleMetaChange}>
+              <form onChange={handleMetaChange} onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="title">
                   Note Title:
                   <input

@@ -14,7 +14,7 @@ export default function Home() {
   const supabase = useSupabaseClient();
 
   const [buttonDisabled, setButtonDisabled] = useState(false)
-  const [buttonText, setButtonText] = useState('Create a new note');
+  const [buttonText, setButtonText] = useState('Create a new note ✨');
 
   const handleCreateNewNote = async (e: any) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function Home() {
     if(error){
       alert('could not create a new note 🥲');
       setButtonDisabled(false);
-      setButtonText('Create a new note');
+      setButtonText('Create a new note ✨');
       return;
     } else {
       router.push(`/notes/${data[0].id}`);

@@ -2,6 +2,7 @@ import RealtimeNote from '@/components/RealtimeNote';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -27,6 +28,7 @@ const NotePage = ({ note, editMode }: NotePageProps) => {
   if (editMode) {
     return (
       <>
+        <p><Link href="/">go back home 🏡</Link></p>
         <DynamicEditorForm noteId={note.id} />
       </>
     );

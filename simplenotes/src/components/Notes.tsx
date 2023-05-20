@@ -10,12 +10,14 @@ const Notes = () => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { data, error } = await supabase
-      .from('notes')
-      .select('*')
-      .eq('created_by', user.id || '*');
-    if (error) console.log(error);
-    if (data) setNotes(data);
+    if (user) {
+      const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .eq('created_by', user.id || '*');
+      if (error) console.log(error);
+      if (data) setNotes(data);
+    }
   };
 
   useEffect(() => {
