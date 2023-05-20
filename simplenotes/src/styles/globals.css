@@ -1,3 +1,6 @@
+/* fix this and import it properly */
+@import "https://unpkg.com/open-props";
+
 form {
   display: flex;
   flex-direction: column;
@@ -17,4 +20,23 @@ input {
   border-radius: 3px;
   border: 1px solid #bbb;
   justify-self: start;
+}
+
+.flash-animation {
+  background: rgba(255, 249, 219, 1);
+  border-radius: var(--radius-2);
+  animation-name: flash;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
+@keyframes flash {
+  from {
+    background: rgba(255, 249, 219, 1);
+  }
+  to {
+    background: rgba(255, 249, 219, 0);
+  }
 }

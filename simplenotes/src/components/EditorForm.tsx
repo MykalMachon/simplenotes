@@ -4,6 +4,7 @@ import 'trix/dist/trix.css';
 import { useEffect, useMemo, useState } from 'react';
 import { TrixEditor } from 'react-trix';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import NoteMetaData from '../components/NoteMetaData';
 
 const debounce = (func: Function, timeout = 1000) => {
   let timer: NodeJS.Timeout;
@@ -28,7 +29,10 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
       .from('notes')
       .select('*')
       .eq('id', noteId);
-    if (error) console.log(error);
+    if (error) {
+      alert('failed to load note...');
+      console.log(error);
+    }
     if (data) {
       setInitNote(data[0]);
     }
@@ -44,11 +48,17 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
 
   const commitNoteChanges = async (html: string | null) => {
     // if(html) console.log(html);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ content: { html: html } })
-      .eq('id', noteId);
-    if (error) console.log(error);
+      .eq('id', noteId).select();
+    if (error) {
+      alert('failed to save note...');
+      console.log(error);
+    }
+    if (data) {
+      setInitNote(data[0]);
+    }
   };
 
   const commitMetaChanges = async (title: string, value: any) => {
@@ -58,11 +68,14 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
       return;
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ [title]: value })
-      .eq('id', noteId);
+      .eq('id', noteId).select();
     if (error) console.log(error);
+    if (data) {
+      setInitNote(data[0]);
+    }
   }
 
   // push the notes content changes up to the database after 1 second without changes.
@@ -116,6 +129,7 @@ const EditorForm = ({ noteId }: EditorFormProps) => {
                 value={initNote?.content?.html}
                 mergeTags={[]}
               />
+              <NoteMetaData noteData={initNote} />
             </div>
           )}
         </>
