@@ -25,9 +25,7 @@ const Notes = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Notes</h1>
-      <section>
+      <section className="">
         {notes === null ? (
           <p>loading...</p>
         ) : (
@@ -35,7 +33,7 @@ const Notes = () => {
             {notes.length === 0 ? (
               <p>no notes found.</p>
             ) : (
-              <ul>
+              <ul className="notes-list">
                 {notes.map((note: any) => (
                   <li key={note.id}>
                     <a href={`/notes/${note.id}`}>{note.title}</a>
@@ -46,7 +44,6 @@ const Notes = () => {
           </>
         )}
       </section>
-    </div>
   );
 };
 

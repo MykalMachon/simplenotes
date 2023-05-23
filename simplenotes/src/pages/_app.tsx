@@ -8,6 +8,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 import '../styles/globals.css';
+import MainLayout from '@/components/MainLayout';
 
 function MyApp({
   Component,
@@ -29,7 +30,9 @@ function MyApp({
         }
       `}</style>
       <div className={inter.className}>
-        <Component {...pageProps} />
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
       </div>
     </SessionContextProvider>
   );
