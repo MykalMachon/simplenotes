@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 type NoteMetaDataProps = {
   noteData: any;
@@ -14,7 +15,6 @@ const NoteMetaData = ({ noteData }: NoteMetaDataProps) => {
   });
 
   const [lastUpdated, setLastUpdated] = useState<any>(null);
-  const [showUpdated, setShowUpdated] = useState<boolean>(false);
   const lastUpdatedInterval = useRef<any>();
 
   const calculateLastUpdated = () => {
@@ -26,8 +26,8 @@ const NoteMetaData = ({ noteData }: NoteMetaDataProps) => {
     const diffInMinutes = Math.floor(diff / (1000 * 60));
 
     if (diffInSeconds > -60) {
-      if(diffInSeconds > -5) {
-        setLastUpdated('just now')
+      if (diffInSeconds > -5) {
+        setLastUpdated('just now');
         return;
       }
       setLastUpdated(relativeTimeFormatter.format(diffInSeconds, 'seconds'));
@@ -42,22 +42,14 @@ const NoteMetaData = ({ noteData }: NoteMetaDataProps) => {
     }
   };
 
-  const showSaveSuccess = () => {
-    setShowUpdated(true);
-    setTimeout(() => {
-        setShowUpdated(false);
-    }, 500)
-  }
-
   useMemo(() => {
     calculateLastUpdated();
-    showSaveSuccess();
     clearInterval(lastUpdatedInterval.current);
-    const interval = setInterval(() => { 
+    const interval = setInterval(() => {
       console.log('running interval');
       calculateLastUpdated();
-     }, 1000 * 29);
-     lastUpdatedInterval.current = interval;
+    }, 1000 * 29);
+    lastUpdatedInterval.current = interval;
   }, [noteData.updated_at]);
 
   useEffect(() => {
@@ -73,7 +65,7 @@ const NoteMetaData = ({ noteData }: NoteMetaDataProps) => {
       <p>
         Created: {absoluteTimeFormatter.format(new Date(noteData.created_at))}
       </p>
-      <p className={showUpdated ? 'flash-animation' : ''}>Last saved: {lastUpdated}</p>
+      <p>Last saved: {lastUpdated}</p>
     </div>
   );
 };

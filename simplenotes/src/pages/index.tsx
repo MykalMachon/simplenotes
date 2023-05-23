@@ -1,14 +1,25 @@
 import Head from 'next/head';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetServerSideProps } from 'next';
+
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 import Notes from '@/components/Notes';
 import NewNoteButton from '@/components/NewNoteButton';
 
-export default function Home({ notes, error }) {
-  const session = useSession();
-  const supabase = useSupabaseClient();
+type HomePageProps = {
+  notes: Array<any>;
+  error: string;
+}
+
+export default function Home({ notes, error }: HomePageProps) {
+
+  useEffect(() => {
+    if(error){
+      toast.error(error)
+    }
+  }, [error])
 
   return (
     <>

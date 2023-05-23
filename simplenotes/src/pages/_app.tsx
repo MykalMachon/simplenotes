@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 import '../styles/globals.css';
 import MainLayout from '@/components/MainLayout';
+import { Toaster } from 'react-hot-toast';
 
 function MyApp({
   Component,
@@ -32,6 +33,7 @@ function MyApp({
       <div className={inter.className}>
         <MainLayout>
           <Component {...pageProps} />
+          <Toaster />
         </MainLayout>
       </div>
     </SessionContextProvider>

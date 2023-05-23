@@ -11,6 +11,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <div className="layout layout--main">
       <NavBar />
       <main className="main">{children}</main>
+      <footer><p>made with 💖 and 🧑‍💻 by <a href="https://mykal.codes/">Mykal</a></p></footer>
     </div>
   );
 };
