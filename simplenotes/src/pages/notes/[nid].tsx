@@ -1,9 +1,8 @@
-import MainLayout from '@/components/MainLayout';
+import AuthorCard from '@/components/AuthorCard';
 import RealtimeNote from '@/components/RealtimeNote';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -60,6 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // if there is an error, redirect to the homepage
   // TODO: show an error message
   if (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',

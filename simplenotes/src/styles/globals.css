@@ -11,7 +11,6 @@ body {
 
 .layout--main {
   min-height: 100vh;
-  min-width: 100vw;
   width: 100%;
   
   display: grid;
@@ -101,7 +100,6 @@ button:hover,
 }
 
 /* notes list */
-
 .notes-list {
   list-style: none;
   padding: 0;
@@ -142,6 +140,39 @@ button:hover,
   max-width: 600px;
   padding: var(--size-3) var(--size-4);
 }
+
+/* realtime note */
+.realtime-note h1 {
+  margin: var(--size-3) 0;
+  font-size: clamp(var(--font-size-6), 5vw, var(--font-size-8));
+}
+
+.realtime-note hr {
+  border-top: none;
+  border-color: var(--indigo-5);
+  margin: var(--size-5) 0;
+}
+
+/* author stuff */
+.author-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size-3);
+  margin: var(--size-3) 0;
+
+}
+
+.author-card img {
+  width: 48px; 
+  height: 48px;
+  border-radius: 64px;
+}
+
+.author-card p {
+  margin: 0;
+}
+
 
 /* footer */
 .layout--main footer {

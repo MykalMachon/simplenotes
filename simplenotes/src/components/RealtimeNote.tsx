@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import AuthorCard from './AuthorCard';
 
 type RealtimeNotes = {
   noteId: number;
@@ -51,10 +52,12 @@ const RealtimeNote = ({ noteId }: RealtimeNotes) => {
       {note === null ? (
         <p>loading...</p>
       ) : (
-        <main>
+        <div className="realtime-note">
           <h1>{note.title}</h1>
+          <AuthorCard profileId={note.created_by} />
+          <hr />
           <article dangerouslySetInnerHTML={{ __html: note?.content?.html }}></article>
-        </main>
+        </div>
       )}
     </>
   );
